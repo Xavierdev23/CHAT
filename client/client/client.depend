@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1702901710 source:/home/amilton/Desktop/chat/client/client/main.cpp
+	<iostream>
+	<cstdlib>
+	<cstring>
+	<unistd.h>
+	<arpa/inet.h>
+

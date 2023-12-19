@@ -5,14 +5,15 @@
 #include <arpa/inet.h>
 #include <string>
 
+using namespace std;
 
-std::string IP = "127.0.0.1";
-const int port = 5000;
+string IP = "127.0.0.1";
+const int port = 2000;
 int main() {
     // Criação do socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1) {
-        std::cerr << "Erro ao criar o socket do servidor.\n";
+        cerr << "Erro ao criar o socket do servidor.\n";
         return EXIT_FAILURE;
     }
 
@@ -24,19 +25,19 @@ int main() {
 
     // Associa o socket à porta
     if (bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) == -1) {
-        std::cerr << "Erro ao associar o socket à porta.\n";
+        cerr << "HOUVE UM PROBLEMA NA ASSOCIACAO DO SOCKET COM A PORTA"<<" PORT: "<<port<<endl;
         close(serverSocket);
         return EXIT_FAILURE;
     }
 
     // Aguarda conexões
     if (listen(serverSocket, 5) == -1) {
-        std::cerr << "Erro ao ouvir conexões.\n";
+        cerr << "NAO FOI POSSIVEL OUVIR AS CONNECTION."<<endl;
         close(serverSocket);
         return EXIT_FAILURE;
     }
 
-    std::cout << "*********SERVER IS RUNNING: "<<IP<<":"<<port<<" ********"<<std::endl;
+    cout << "*********SERVER IS RUNNING: "<<IP<<":"<<port<<" ********"<<endl;
 
     // Aceita a conexão de um cliente
     sockaddr_in clientAddress;
@@ -44,12 +45,12 @@ int main() {
     int clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddress, &clientSize);
 
     if (clientSocket == -1) {
-        std::cerr << "Erro ao aceitar a conexão do cliente.\n";
+        cerr << "Erro ao aceitar a conexão do cliente.\n"<<endl;
         close(serverSocket);
         return EXIT_FAILURE;
     }
 
-    std::cout << "Cliente conectado.\n";
+    cout << "EXISTE UM CLIENTE NA CONNECTION!.\n"<<endl;
 
     // Loop de comunicação com o cliente
     char buffer[1024];
@@ -58,7 +59,7 @@ int main() {
 
         // Recebe a mensagem do cliente
         if (recv(clientSocket, buffer, sizeof(buffer), 0) == -1) {
-            std::cerr << "Erro ao receber mensagem do cliente.\n";
+            cerr << "HOUVE UM PROBLEMA AO RECEBER MENSAGEM.\n";
             break;
         }
 
@@ -67,11 +68,11 @@ int main() {
             break;
         }
 
-        std::cout << "CLIENTE: " << buffer << std::endl;
+        cout << "RECEBIDA*: " << buffer << endl;
 
         // Envia uma mensagem de volta ao cliente
-        std::cout << "Digite a mensagem para o cliente: ";
-        std::cin.getline(buffer, sizeof(buffer));
+        cout << "ESCREVER: ";
+        cin.getline(buffer, sizeof(buffer));
         send(clientSocket, buffer, strlen(buffer), 0);
     }
 
@@ -79,7 +80,7 @@ int main() {
     close(clientSocket);
     close(serverSocket);
 
-    std::cout << "Conexão encerrada.\n";
+    cout << "CONNECTIO DIE.\n";
 
     return EXIT_SUCCESS;
 }
